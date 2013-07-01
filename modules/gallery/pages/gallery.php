@@ -169,10 +169,10 @@ elseif($_route->getByID(1) === 'album')
 	{
 		$data = new Edit(
 			array(
-				'current' => $_route->getByID(4) ? $_route->getByID(4) : 1
+				'current' => $_route->getByID(3) ? is_numeric($_route->getByID(3)) ? $_route->getByID(3) : 1 : 1
 			)
 		);
-
+		
 		$rows = $_pdo->getMatchRowsCount('
 			SELECT p.`id`
 			FROM [gallery_photos] p
@@ -186,8 +186,8 @@ elseif($_route->getByID(1) === 'album')
 
 		if ($rows)
 		{
-			$rowstart = Paging::getRowStart(intval($data->arr('current')->isNum(TRUE, FALSE)), intval($_gallery_sett->get('albums_per_page')));
-
+			$rowstart = $data->arr('current')->isNum(TRUE, FALSE) ? Paging::getRowStart($data->arr('current')->isNum(TRUE, FALSE), intval($_gallery_sett->get('photos_per_page'))) : 0;
+		
 			$cache = $_system->cache('gallery,album-id-'.$_route->getByID(2).','.$_user->getCacheName().',page-'.$data->arr('current')->isNum(TRUE, FALSE), NULL, 'gallery', $_gallery_sett->get('cache_expire'));
 			if ($cache === NULL)
 			{
@@ -242,7 +242,7 @@ elseif($_route->getByID(1) === 'album')
 				}
 				$_system->cache('gallery,album-id-'.$_route->getByID(2).','.$_user->getCacheName().',page-'.$data->arr('current')->isNum(TRUE, FALSE), $cache, 'gallery');
 			}
-			var_dump($rows, intval($data->arr('current')->isNum(TRUE, FALSE)), intval($_gallery_sett->get('photos_per_page')));
+			
 			$ec->paging->setPagesCount($rows, intval($data->arr('current')->isNum(TRUE, FALSE)), intval($_gallery_sett->get('photos_per_page')));
 			if (file_exists(DIR_THEME.'templates'.DS.'paging'.DS.'gallery_page_nav.tpl'))
 			{
