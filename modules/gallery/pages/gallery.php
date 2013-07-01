@@ -169,7 +169,7 @@ elseif($_route->getByID(1) === 'album')
 	{
 		$data = new Edit(
 			array(
-				'current' => $_route->getByID(3) ? is_numeric($_route->getByID(3)) ? $_route->getByID(3) : 1 : 1
+				'current' => $_route->getByID(5) ? is_numeric($_route->getByID(5)) ? $_route->getByID(5) : 1 : 1
 			)
 		);
 		
@@ -432,7 +432,7 @@ else
 {
 	$data = new Edit(
 		array(
-			'current' => $_route->getByID(2) ? $_route->getByID(2) : 1
+			'current' => $_route->getByID(5) ? $_route->getByID(5) : 1
 		)
 	);
 
