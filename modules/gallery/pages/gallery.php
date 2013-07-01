@@ -92,15 +92,23 @@ if($_route->getByID(1) === 'cat')
 							'album_link' => $_route->path(array('controller' => 'gallery', 'action' => 'album', $row['id'], $row['title'])),
 							'comments' => $row['comments'],
 							'access' => $row['access'],
-							'role_name' => $_user->getRoleName($row['access'])
+							'role_name' => $_user->getRoleName(HELP::explode($row['access']))
 						);
 						$i++;
 					}
 				}
 				$_system->cache('gallery,cat-id-'.$_route->getByID(2).','.$_user->getCacheName(), $cache, 'gallery');
 			}
-
-			$_pagenav = new PageNav(new Paging($rows, $data->arr('current')->isNum(TRUE, FALSE), intval($_gallery_sett->get('albums_per_page'))), $_tpl, 5, array($_route->getFileName(), 'cat,'.$_route->getByID(2).','.$_route->getByID(3).',page'));
+			
+			$ec->paging->setPagesCount($rows, $data->arr('current')->isNum(TRUE, FALSE), intval($_gallery_sett->get('albums_per_page')));
+			if (file_exists(DIR_THEME.'templates'.DS.'paging'.DS.'gallery_page_nav.tpl'))
+			{
+				$ec->pageNav->get($ec->pageNav->create($_tpl, 5), 'gallery_page_nav', DIR_THEME.'templates'.DS.'paging'.DS);
+			}
+			else
+			{
+				$ec->pageNav->get($ec->pageNav->create($_tpl, 5), 'gallery_page_nav', DIR_MODULES.'gallery'.DS.'templates'.DS.'paging'.DS);
+			}
 			
 			$_tpl->assign('album', $cache);
 		}
@@ -161,7 +169,7 @@ elseif($_route->getByID(1) === 'album')
 	{
 		$data = new Edit(
 			array(
-				'current' => $_route->getByID(5) ? $_route->getByID(5) : 1
+				'current' => $_route->getByID(4) ? $_route->getByID(4) : 1
 			)
 		);
 
@@ -178,7 +186,7 @@ elseif($_route->getByID(1) === 'album')
 
 		if ($rows)
 		{
-			$rowstart = $data->arr('current')->isNum(TRUE, FALSE) ? Paging::getRowStart($data->arr('current')->isNum(TRUE, FALSE), intval($_gallery_sett->get('albums_per_page'))) : 0;
+			$rowstart = Paging::getRowStart(intval($data->arr('current')->isNum(TRUE, FALSE)), intval($_gallery_sett->get('albums_per_page')));
 
 			$cache = $_system->cache('gallery,album-id-'.$_route->getByID(2).','.$_user->getCacheName().',page-'.$data->arr('current')->isNum(TRUE, FALSE), NULL, 'gallery', $_gallery_sett->get('cache_expire'));
 			if ($cache === NULL)
@@ -234,9 +242,17 @@ elseif($_route->getByID(1) === 'album')
 				}
 				$_system->cache('gallery,album-id-'.$_route->getByID(2).','.$_user->getCacheName().',page-'.$data->arr('current')->isNum(TRUE, FALSE), $cache, 'gallery');
 			}
+			var_dump($rows, intval($data->arr('current')->isNum(TRUE, FALSE)), intval($_gallery_sett->get('photos_per_page')));
+			$ec->paging->setPagesCount($rows, intval($data->arr('current')->isNum(TRUE, FALSE)), intval($_gallery_sett->get('photos_per_page')));
+			if (file_exists(DIR_THEME.'templates'.DS.'paging'.DS.'gallery_page_nav.tpl'))
+			{
+				$ec->pageNav->get($ec->pageNav->create($_tpl, 5), 'gallery_page_nav', DIR_THEME.'templates'.DS.'paging'.DS);
+			}
+			else
+			{
+				$ec->pageNav->get($ec->pageNav->create($_tpl, 5), 'gallery_page_nav', DIR_MODULES.'gallery'.DS.'templates'.DS.'paging'.DS);
+			}
 			
-			$_pagenav = new PageNav(new Paging($rows, $data->arr('current')->isNum(TRUE, FALSE), intval($_gallery_sett->get('photos_per_page'))), $_tpl, 5, array($_route->getFileName(), 'album,'.$_route->getByID(2).','.$_route->getByID(3).',page'));
-		
 			$_tpl->assign('photo', $cache);
 		}
 	}
@@ -338,10 +354,9 @@ elseif($_route->getByID(1) === 'photo')
 		{
 			if ($cache['comment'] === '1')
 			{	
-				$_comment = $ec->comment;
+				$_comment = new CommentPageNav($ec, $_pdo, $_tpl);
+				$_comment->create($cache['id'], $_route->getByID(4), $ec->comment->getLimit(), 5, $_route->getFileName());
 				
-				$_tpl->assign('comment', $_comment->get($_route->getFileName(), $cache['id']));
-
 				if (isset($_POST['comment']['save']))
 				{
 					$comment = array_merge($comment, array(
@@ -498,8 +513,16 @@ else
 			}
 			$_system->cache('gallery,cats,'.$_user->getCacheName().',page-'.$data->arr('current')->isNum(TRUE, FALSE), $cache, 'gallery');
 		}
-			
-		$_pagenav = new PageNav(new Paging($rows, $data->arr('current')->isNum(TRUE, FALSE), intval($_gallery_sett->get('cats_per_page'))), $_tpl, 5, array($_route->getFileName(), 'page'));
+	
+		$ec->paging->setPagesCount($rows, $data->arr('current')->isNum(TRUE, FALSE), intval($_gallery_sett->get('cats_per_page')));
+		if (file_exists(DIR_THEME.'templates'.DS.'paging'.DS.'gallery_page_nav.tpl'))
+		{
+			$ec->pageNav->get($ec->pageNav->create($_tpl, 5), 'gallery_page_nav', DIR_THEME.'templates'.DS.'paging'.DS);
+		}
+		else
+		{
+			$ec->pageNav->get($ec->pageNav->create($_tpl, 5), 'gallery_page_nav', DIR_MODULES.'gallery'.DS.'templates'.DS.'paging'.DS);
+		}
 		
 		$_tpl->assign('cat', $cache);
 	}
@@ -532,18 +555,6 @@ else
 		);
 		
 		$_system->cache('gallery,seo-var-cats,'.$_user->getCacheName(), $seo_var, 'gallery');
-	}
-}
-
-if (isset($_pagenav))
-{
-	if (file_exists(DIR_THEME.'templates'.DS.'paging'.DS.'gallery_page_nav.tpl'))
-	{
-		$_pagenav->get($_pagenav->create(), 'gallery_page_nav', DIR_THEME.'templates'.DS.'paging'.DS);
-	}
-	else
-	{
-		$_pagenav->get($_pagenav->create(), 'gallery_page_nav', DIR_MODULES.'gallery'.DS.'templates'.DS.'paging'.DS);
 	}
 }
 

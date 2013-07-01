@@ -103,7 +103,7 @@
 			<div class="formField grid_1"><input type="text" name="order" value="{$order}" id="order" /></div>
 		</div>
 		<div class="tbl Buttons">
-			<div class="sep_2 center grid_2 button-l">
+			<div class="center grid_2 button-l">
 				<span class="Cancel"><strong>{i18n('Back')}<img src="{$ADDR_ADMIN_ICONS}pixel/undo.png" alt="" /></strong></span>
 			</div>
 			<div class="center grid_2 button-r">
@@ -239,7 +239,7 @@
 				<div class="formField grid_1"><input type="text" name="order" value="{$order}" id="order" /></div>
 			</div>
 			<div class="tbl Buttons">
-				<div class="sep_2 center grid_2 button-l">
+				<div class="center grid_2 button-l">
 					<span class="Cancel"><strong>{i18n('Back')}<img src="{$ADDR_ADMIN_ICONS}pixel/undo.png" alt="" /></strong></span>
 				</div>
 				<div class="center grid_2 button-r">
@@ -429,7 +429,7 @@
 				<div class="formField grid_1"><input type="text" name="order" value="{$order}" id="order" /></div>
 			</div>
 			<div class="tbl Buttons">
-				<div class="sep_2 center grid_2 button-l">
+				<div class="center grid_2 button-l">
 					<span class="Cancel"><strong>{i18n('Back')}<img src="{$ADDR_ADMIN_ICONS}pixel/undo.png" alt="" /></strong></span>
 				</div>
 				<div class="center grid_2 button-r">
@@ -783,7 +783,7 @@
 		</div>
 		
 		<div class="tb1 Buttons">
-			<div class="sep_2 center grid_2 button-l">
+			<div class="center grid_2 button-l">
 				<span class="Cancel"><strong>{i18n('Back')}<img src="{$ADDR_ADMIN_ICONS}pixel/undo.png" alt="" /></strong></span>
 			</div>
 			<div class="center grid_2 button-r">

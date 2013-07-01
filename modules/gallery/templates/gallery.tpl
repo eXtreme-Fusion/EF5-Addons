@@ -12,8 +12,9 @@
 	{/if}
 </div>
 {if $page === 'cat'}
-	{php} opentable(__('Albums list')) {/php}
+	{php} $this->sidePanel(__('Albums list')); {/php}
 	{if $album}
+		<div class="tbl2">
 			<div class="floatfix container_10 center">
 			{section=album}
 				<a href="{$album.album_link}" title="
@@ -26,18 +27,21 @@
 				class="tip {$album.color}" style="float:left; height:20%; width:20%; display:block; padding:5px; margin:5px; text-decoration:none;"><img src="{$ADDR_SITE}modules/gallery/templates/images/upload/albums/thumbnail/_thumbnail_{$album.file_name}" alt="{$album.title}" /></a>
 			
 			{/section}
-			</div>	
+			</div>
+		</div>	
+		<div class="center">
 			{$page_nav}
-		
+		</div>
 	{else}
 		<div class="tbl2">
 			<div class="info">{i18n('There are no albums.')}</div>
 		</div>
 	{/if}
-	{php} closetable() {/php}
+	{php} $this->sidePanel(); {/php}
 {elseif $page === 'album'}
-	{php} opentable(__('Images list')) {/php}
+	{php} $this->sidePanel(__('Images list')); {/php}
 	{if $photo}
+		<div class="tbl2">
 			<div class="floatfix container_10 center">
 			{section=photo}
 				<div style="float:left; height:20%; width:20%; padding:5px; margin:5px; text-decoration:none;">
@@ -55,16 +59,19 @@
 				</div>
 			{/section}
 			</div>	
+		</div>	
+		<div class="center">
 			{$page_nav}
+		</div>
 	{else}
 		<div class="tbl2">
 			<div class="info">{i18n('There are no images.')}</div>
 		</div>
 	{/if}
-	{php} closetable() {/php}
+	{php} $this->sidePanel(); {/php}
 {elseif $page === 'photo'}
 	{if $photo}
-		{php} opentable(__('Image: :photoTitle', array(':photoTitle' => $this->data['photo']['name']))) {/php}
+		{php} $this->sidePanel(__('Image: :photoTitle', array(':photoTitle' => $this->data['photo']['name']))); {/php}
 			<div class="main-body floatfix container_10 center">
 				<div class="tbl1 center">
 					<div class="sep_1 center">Tytuł: {$photo.title}</div>
@@ -85,18 +92,19 @@
 					<div class="center">Dostęp: {$photo.role_name}</div>
 				</div>
 			</div>
-		{php} closetable() {/php}
-		{$comment}
+		{php} $this->sidePanel(); {/php}
+		{$comments}
 	{else}
 		{php} opentable('Obraz nie istenieje') {/php}
 		<div class="tbl2">
 			<div class="info">{i18n('The image was not found.')}</div>
 		</div>
-		{php} closetable() {/php}
+		{php} $this->sidePanel(); {/php}
 	{/if}
 {else}
-	{php} opentable(__('Categories list')) {/php}
+	{php} $this->sidePanel(__('Categories list')); {/php}
 	{if $cat}
+		<div class="tbl2">
 			<div class="floatfix container_10 center">
 			{section=cat}
 				<a href="{$cat.cat_link}" title="
@@ -109,12 +117,15 @@
 					{i18n('Created:')} {date("d.m.Y", $cat.datestamp)}"
 				class="tip {$cat.color}" style="float:left; height:20%; width:20%; display:block; padding:5px; margin:5px; text-decoration:none;"><img src="{$ADDR_SITE}modules/gallery/templates/images/upload/cats/thumbnail/_thumbnail_{$cat.file_name}" alt="{$cat.title}" /></a>
 			{/section}
-			</div>	
+			</div>
+		</div>
+		<div class="center">
 			{$page_nav}
+		</div>
 	{else}
 		<div class="tbl2">
 			<div class="info">{i18n('There are no categories.')}</div>
 		</div>
 	{/if}
-	{php} closetable() {/php}
+	{php} $this->sidePanel(); {/php}
 {/if}

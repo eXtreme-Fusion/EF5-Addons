@@ -448,7 +448,7 @@ class Image {
 	* @param   string	ścieżka bezwzględna do pliku graficznego
 	* @return  bool
 	*/
-	public function setWatermark($name = 'extreme-fusion-logo-light.png', $dir = DIR_IMAGES)
+	public function setWatermark($name = 'extreme-fusion-logo.png', $dir = DIR_IMAGES)
 	{
 		$this->_watermark = array(
 			'name' => $name,
