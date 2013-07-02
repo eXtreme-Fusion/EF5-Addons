@@ -92,7 +92,7 @@ if($_route->getByID(1) === 'cat')
 							'album_link' => $_route->path(array('controller' => 'gallery', 'action' => 'album', $row['id'], $row['title'])),
 							'comments' => $row['comments'],
 							'access' => $row['access'],
-							'role_name' => $_user->getRoleName(HELP::explode($row['access']))
+							'role_name' => $_user->getRoleName($row['access'])
 						);
 						$i++;
 					}
@@ -432,7 +432,7 @@ else
 {
 	$data = new Edit(
 		array(
-			'current' => $_route->getByID(5) ? $_route->getByID(5) : 1
+			'current' => $_route->getByID(2) ? $_route->getByID(2) : 1
 		)
 	);
 
