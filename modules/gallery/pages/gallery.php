@@ -355,8 +355,15 @@ elseif($_route->getByID(1) === 'photo')
 			if ($cache['comment'] === '1')
 			{	
 				$_comment = new CommentPageNav($ec, $_pdo, $_tpl);
-				$_comment->create($cache['id'], $_route->getByID(4), $ec->comment->getLimit(), 5, $_route->getFileName());
-				
+				if (file_exists(DIR_THEME.'templates'.DS.'paging'.DS.'gallery_page_nav_comments'))
+				{
+					$_comment->create($cache['id'], $_route->getByID(4), $ec->comment->getLimit(), 5, $_route->getFileName(), 'gallery_page_nav_comments', DIR_THEME.'templates'.DS.'paging'.DS);
+				}
+				else
+				{
+					$_comment->create($cache['id'], $_route->getByID(4), $ec->comment->getLimit(), 5, $_route->getFileName(), 'gallery_page_nav_comments', DIR_MODULES.'gallery'.DS.'templates'.DS.'paging'.DS);
+				}
+
 				if (isset($_POST['comment']['save']))
 				{
 					$comment = array_merge($comment, array(
