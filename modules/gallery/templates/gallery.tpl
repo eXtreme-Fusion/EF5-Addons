@@ -71,7 +71,7 @@
 	{php} $this->sidePanel(); {/php}
 {elseif $page === 'photo'}
 	{if $photo}
-		{php} $this->sidePanel(__('Image: :photoTitle', array(':photoTitle' => $this->data['photo']['name']))); {/php}
+		{php} $this->sidePanel(__('Image: :photoTitle', array(':photoTitle' => $this->data['photo']['title']))); {/php}
 			<div class="main-body floatfix container_10 center">
 				<div class="tbl1 center">
 					<div class="sep_1 center">Tytuł: {$photo.title}</div>

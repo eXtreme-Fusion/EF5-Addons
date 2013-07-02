@@ -342,14 +342,15 @@
 				<small>{i18n('Nazwa pliku jest obowiązkowa!.')}</small>
 				</div>
 			</div>
-			{if ! $edit}
 			<div class="tbl2">
 				<div class="formLabel sep_1 grid_2"><label for="file_name">{i18n('File name:')}</label></div>
 				<div class="formField grid_6">
 					<input type="text" name="file_name" value="{$file_name}" id="file_name" rows="1" />
+					{if $path_absolute}<input type="hidden" name="path_absolute" value="{$path_absolute}" />{/if}
 					<small>{i18n('Leave this field empty if you want to keep original name or add your own file name.')}</small>
 				</div>
 			</div>
+			{if ! $edit}
 			<div class="tbl2">
 				<div class="formLabel sep_1 grid_2"><label for="file">{i18n('File:')}</label></div>
 				<div class="formField grid_6"><input type="file" name="file" value="{$file}" id="file" rows="1" /></div>

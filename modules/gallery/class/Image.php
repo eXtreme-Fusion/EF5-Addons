@@ -595,6 +595,7 @@ class Image {
 	{
 		if ( ! $this->imageExists($this->_input_photo['dir'], $this->_input_photo['name']))
 		{
+			var_dump($this->_watermark['dir'], $this->_input_photo['name']);
 			throw new systemException(__('Error: Image :name does not exist.', array(':name' => $this->_input_photo['name'])));
 		}
 		

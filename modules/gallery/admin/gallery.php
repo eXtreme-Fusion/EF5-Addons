@@ -103,6 +103,7 @@ try
 					
 					// Przekierowanie dla komunikatu sukcesu
 					$_log->insertSuccess('delete', __('The category has been deleted.'));
+					$_system->clearcache('gallery');
 					$_request->redirect(FILE_PATH, array('page' => 'cats', 'act' => 'delete', 'status' => 'ok'));
 				}
 				
@@ -229,6 +230,7 @@ try
 					
 					// Przekierowanie dla komunikatu sukcesu
 					$_log->insertSuccess('edit', __('The category has been edited.'));
+					$_system->clearcache('gallery');
 					$_request->redirect(FILE_PATH, array('page' => 'cats', 'act' => 'edit', 'status' => 'ok'));
 				}
 				
@@ -305,6 +307,7 @@ try
 					
 					// Przekierowanie dla komunikatu sukcesu
 					$_log->insertSuccess('add', __('The category has been added.'));
+					$_system->clearcache('gallery');
 					$_request->redirect(FILE_PATH, array('page' => 'cats', 'act' => 'add', 'status' => 'ok'));
 				}
 				
@@ -434,6 +437,7 @@ try
 					
 					// Przekierowanie dla komunikatu sukcesu
 					$_log->insertSuccess('delete', __('The album has been deleted.'));
+					$_system->clearcache('gallery');
 					$_request->redirect(FILE_PATH, array('page' => 'albums', 'act' => 'delete', 'status' => 'ok'));
 				}
 				
@@ -562,6 +566,7 @@ try
 					
 					// Przekierowanie dla komunikatu sukcesu
 					$_log->insertSuccess('edit', __('The album has been edited.'));
+					$_system->clearcache('gallery');
 					$_request->redirect(FILE_PATH, array('page' => 'albums', 'act' => 'edit', 'status' => 'ok'));
 				}
 				
@@ -639,6 +644,7 @@ try
 					
 					// Przekierowanie dla komunikatu sukcesu
 					$_log->insertSuccess('add', __('The album has been added.'));
+					$_system->clearcache('gallery');
 					$_request->redirect(FILE_PATH, array('page' => 'albums', 'act' => 'add', 'status' => 'ok'));
 				}
 				
@@ -789,6 +795,7 @@ try
 					
 				// Przekierowanie dla komunikatu sukcesu
 				$_log->insertSuccess('delete', __('The image has been deleted.'));
+				$_system->clearcache('gallery');
 				$_request->redirect(FILE_PATH, array('page' => 'photos', 'act' => 'delete', 'status' => 'ok'));
 			}
 			
@@ -817,9 +824,29 @@ try
 			{
 				throw new systemException('Empty field');
 			}
-			
+				
 			if (($_request->get('action')->show() === "edit") && $_request->get('id')->isNum(TRUE)) 
 			{
+				$path_absolute 	= $_request->post('path_absolute')->show();
+				$path_original 	= $_request->post('path_absolute')->show().'original'.DS;
+				$path_watermark = $_request->post('path_absolute')->show().'watermark'.DS;
+				
+				// Znak wodny
+				if ($watermark)
+				{
+					// Ustaw znak wondy
+					$_image->setWatermark($_gallery_sett->get('watermark_logo'));
+					
+					// Wybierz plik na którym utworzysz znak wodny
+					$_image->setInputPhoto($file_name, $path_original);
+					
+					// Wybierz ścieżkę w której zapiszesz stworzony plik z znakiem wodnym
+					$_image->setOutputPhoto(NULL, $path_watermark);
+				
+					// Utwórz znak wodny
+					$_image->createWatermark();
+				}
+
 				// Zapisz edytowane dane
 				
 				// Pobierz kolejność edytowanego rekordu
@@ -873,6 +900,7 @@ try
 					
 					// Przekierowanie dla komunikatu sukcesu
 					$_log->insertSuccess('edit', __('The image has been edited.'));
+					$_system->clearcache('gallery');
 					$_request->redirect(FILE_PATH, array('page' => 'photos', 'act' => 'edit', 'status' => 'ok'));
 				}
 				
@@ -896,9 +924,7 @@ try
 				
 				// Walidacja dopuszczalnej wagi pliku
 				$_image->validSize($_request->file('file', 'size')->show());
-				
-				$file_name = $file_name !== '' ? $_image->setPhotoName($file_name).$_image->getPhotoExt(strtolower($_request->file('file', 'name')->show())) : $_image->setPhotoName($_image->getPhotoNameWithExtension(strtolower($_request->file('file', 'name')->show()))).$_image->getPhotoExt(strtolower($_request->file('file', 'name')->show()));
-				
+
 				$path_upload = DIR_MODULES.'gallery'.DS.'templates'.DS.'images'.DS.'upload'.DS;
 				
 				$_image->createDir($path_upload, 'photos', 0777);
@@ -918,6 +944,8 @@ try
 				
 				$path_url = ADDR_SITE.'modules/gallery/templates/images/upload/photos/'.date('Y').'/'.date('m').'/'.date('d').'/';
 				
+				$file_name = $file_name !== '' ? $_image->setPhotoName($file_name).$_image->getPhotoExt(strtolower($_request->file('file', 'name')->show())) : $_image->setPhotoName($_image->getPhotoNameWithExtension(strtolower($_request->file('file', 'name')->show()))).$_image->getPhotoExt(strtolower($_request->file('file', 'name')->show()));
+
 				if (file_exists($path_original.$file_name))
 				{
 					throw new systemException(__('Error: Image with that title (:iname) is already existing!', array(':iname' => $path_original.$file_name)));
@@ -1021,6 +1049,7 @@ try
 					
 					// Przekierowanie dla komunikatu sukcesu
 					$_log->insertSuccess('add', __('The album has been added.'));
+					$_system->clearcache('gallery');
 					$_request->redirect(FILE_PATH, array('page' => 'photos', 'act' => 'add', 'status' => 'ok'));
 				}
 				
@@ -1034,7 +1063,7 @@ try
 		if (($_request->get('action')->show() === "edit") && $_request->get('id')->isNum(TRUE))
 		{
 			// Pobranie kolumny z danego identyfikatora
-			$row = $_pdo->getRow('SELECT `id`, `title`, `description`, `watermark`, `comment`, `rating`, `album`, `access`, `order` FROM [gallery_photos] WHERE `id` = :id',
+			$row = $_pdo->getRow('SELECT `id`, `title`, `file_name`, `path_absolute`, `description`, `watermark`, `comment`, `rating`, `album`, `access`, `order` FROM [gallery_photos] WHERE `id` = :id',
 				array(':id', $_request->get('id')->show(), PDO::PARAM_INT)
 			);
 			
@@ -1052,6 +1081,8 @@ try
 				$_tpl->assignGroup(array(
 						'id' => $row['id'],
 						'title' => $row['title'],
+						'file_name' => $row['file_name'],
+						'path_absolute' => $row['path_absolute'],
 						'description' => $row['description'],
 						'keyword' => $keyword,
 						'album' => $row['album'],
@@ -1183,7 +1214,7 @@ try
 			);
 			
 			$_tag->updTag('GALLERY_GLOBAL', 1, $_request->post('tag')->strip());
-			
+			$_system->clearcache('gallery');
 			$_tpl->printMessage('valid', $_log->insertSuccess('edit', __('Data has been saved.')));
 		}
 		

@@ -238,7 +238,7 @@ $new_row[27] = array(
 
 $new_row[28] = array(
 	"gallery_sett", 
-	"(`key`, `value`) VALUES ('watermark_logo', 'extreme-fusion-logo-light.png')"
+	"(`key`, `value`) VALUES ('watermark_logo', 'extreme-fusion-logo.png')"
 );
 
 $new_row[29] = array(
