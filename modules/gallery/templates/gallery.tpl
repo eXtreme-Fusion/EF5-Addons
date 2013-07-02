@@ -95,7 +95,7 @@
 		{php} $this->sidePanel(); {/php}
 		{$comments}
 	{else}
-		{php} opentable('Obraz nie istenieje') {/php}
+		{php} $this->sidePanel(__('Obraz nie istnieje')); {/php}
 		<div class="tbl2">
 			<div class="info">{i18n('The image was not found.')}</div>
 		</div>
