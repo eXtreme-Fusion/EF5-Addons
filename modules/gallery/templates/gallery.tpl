@@ -12,7 +12,7 @@
 	{/if}
 </div>
 {if $page === 'cat'}
-	{php} $this->sidePanel(__('Albums list')); {/php}
+	{php} $this->middlePanel(__('Albums list')); {/php}
 	{if $album}
 		<div class="tbl2">
 			<div class="floatfix container_10 center">
@@ -37,9 +37,9 @@
 			<div class="info">{i18n('There are no albums.')}</div>
 		</div>
 	{/if}
-	{php} $this->sidePanel(); {/php}
+	{php} $this->middlePanel(); {/php}
 {elseif $page === 'album'}
-	{php} $this->sidePanel(__('Images list')); {/php}
+	{php} $this->middlePanel(__('Images list')); {/php}
 	{if $photo}
 		<div class="tbl2">
 			<div class="floatfix container_10 center">
@@ -68,10 +68,10 @@
 			<div class="info">{i18n('There are no images.')}</div>
 		</div>
 	{/if}
-	{php} $this->sidePanel(); {/php}
+	{php} $this->middlePanel(); {/php}
 {elseif $page === 'photo'}
 	{if $photo}
-		{php} $this->sidePanel(__('Image: :photoTitle', array(':photoTitle' => $this->data['photo']['title']))); {/php}
+		{php} $this->middlePanel(__('Image: :photoTitle', array(':photoTitle' => $this->data['photo']['title']))); {/php}
 			<div class="main-body floatfix container_10 center">
 				<div class="tbl1 center">
 					<div class="sep_1 center">Tytuł: {$photo.title}</div>
@@ -92,17 +92,17 @@
 					<div class="center">Dostęp: {$photo.role_name}</div>
 				</div>
 			</div>
-		{php} $this->sidePanel(); {/php}
+		{php} $this->middlePanel(); {/php}
 		{$comments}
 	{else}
-		{php} $this->sidePanel(__('Obraz nie istnieje')); {/php}
+		{php} $this->middlePanel(__('Obraz nie istnieje')); {/php}
 		<div class="tbl2">
 			<div class="info">{i18n('The image was not found.')}</div>
 		</div>
-		{php} $this->sidePanel(); {/php}
+		{php} $this->middlePanel(); {/php}
 	{/if}
 {else}
-	{php} $this->sidePanel(__('Categories list')); {/php}
+	{php} $this->middlePanel(__('Categories list')); {/php}
 	{if $cat}
 		<div class="tbl2">
 			<div class="floatfix container_10 center">
@@ -127,5 +127,5 @@
 			<div class="info">{i18n('There are no categories.')}</div>
 		</div>
 	{/if}
-	{php} $this->sidePanel(); {/php}
+	{php} $this->middlePanel(); {/php}
 {/if}
