@@ -125,7 +125,7 @@ elseif ($_route->getByID(1) === 'cat' && isNum($_route->getByID(2)))
 		$_GET['current'] = $_route->getByID(4);
 	}
 
-	$_GET['rowstart'] = PAGING::getRowStart($_GET['current'], $items_per_page);
+	$_GET['rowstart'] = Paging::getRowStart($_GET['current'], $items_per_page);
 
 	# / STRONICOWANIE #
 	
@@ -204,9 +204,8 @@ elseif ($_route->getByID(1) === 'cat' && isNum($_route->getByID(2)))
 		$_tpl->assign('file', $data);
 	}
 	
-	$_pagenav = new PageNav(new Paging($rows, $_GET['current'], $items_per_page), $_tpl, 5, array($_route->getByID(2), 'page'));
-
-	$_pagenav->get($_pagenav->create(), 'page_nav');
+	$ec->paging->setPagesCount($rows, $_GET['current'], $items_per_page);
+	$ec->pageNav->get($ec->pageNav->create($_tpl, 5, array($_route->getByID(2), 'page')), 'page_nav', DIR_ADMIN_TEMPLATES.'paging'.DS);
 }
 else
 {

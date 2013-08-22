@@ -16,14 +16,13 @@ try
 
 	$_locale->moduleLoad('admin', 'gallery');
 
-        if ( ! $_user->hasPermission('module.gallery.admin'))
-        {
-            throw new userException(__('Access denied'));
-        }
+	if ( ! $_user->hasPermission('module.gallery.admin'))
+	{
+		throw new userException(__('Access denied'));
+	}
 
-        $_tpl = new AdminModuleIframe('gallery');
+	$_tpl = new AdminModuleIframe('gallery');
 	
-	include DIR_MODULES.'gallery'.DS.'class'.DS.'Sett.php';
 	include DIR_MODULES.'gallery'.DS.'class'.DS.'Image.php';
 	include DIR_MODULES.'gallery'.DS.'config.php';
 	

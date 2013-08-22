@@ -141,4 +141,4 @@ class GallerySett {
 
 		return FALSE;
 	}
-}
+}  

@@ -27,10 +27,10 @@ try
 	
 	$_tpl->assign('config', $mod_info);
 
-	// Wyœwietlenie komunikatów
+	// Wyï¿½wietlenie komunikatï¿½w
 	if ($_request->get(array('status', 'act'))->show())
 	{
-		// Wyœwietli komunikat
+		// Wyï¿½wietli komunikat
 		$_tpl->getMessage($_request->get('status')->show(), $_request->get('act')->show(), 
 			array(
 				'add_file' => array(
@@ -217,7 +217,7 @@ try
 			if ($rows)
 			{
 				$per_page = 20;
-				$rowstart = $_GET['current'] ? PAGING::getRowStart($_GET['current'], intval($per_page)) : 0;
+				$rowstart = $_GET['current'] ? Paging::getRowStart($_GET['current'], intval($per_page)): 0;
 				
 				$query = $_pdo->getData('
 					SELECT f.`id`, f.`name`, f.`desc`, f.`size`, f.`subcat`, f.`date`, s.`name` AS `sub_name`
@@ -251,9 +251,8 @@ try
 					$_tpl->assign('file', $data);
 				}
 				
-				$_pagenav = new PageNav(new Paging($rows, $_GET['current'], intval($per_page)), $_tpl, 10, array('page=mdp_files', 'current=', FALSE));
-				
-				$_pagenav->get($_pagenav->create(), 'page_nav', DIR_ADMIN_TEMPLATES.'paging'.DS);
+				$ec->paging->setPagesCount($rows, $_GET['current'], intval($per_page));
+				$ec->pageNav->get($ec->pageNav->create($_tpl, 10, array('page=mdp_files', 'current=', FALSE)), 'page_nav', DIR_ADMIN_TEMPLATES.'paging'.DS);
 			}
 		}
 		else

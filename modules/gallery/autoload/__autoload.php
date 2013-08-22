@@ -29,9 +29,7 @@ if ($row)
 	// Sprawdzenie czy aktualnie znajdujemy się w galerii
 	if ($_route->getFileName() === 'gallery')
 	{
-		include DIR_MODULES.'gallery'.DS.'class'.DS.'Sett.php';
-		
-		$_gallery_sett = new GallerySett($_system, $_pdo);
+		! class_exists('GallerySett') || $_gallery_sett = New GallerySett($_system, $_pdo);
 		
 		// Dodanie do sekcji head kodów js/css
 		$_head->set('
